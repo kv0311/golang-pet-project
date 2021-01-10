@@ -1,8 +1,6 @@
 package app
 
 import (
-	"golang-side-project/constant"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,11 +16,11 @@ type Response struct {
 	Data interface{} `json:"data"`
 }
 
-// ResponseHttp data api
-func (g Gin) ResponseHttp(httpCode int, errCode int, data interface{}) {
+//ResponseHttp data api
+func (g Gin) ResponseHttp(httpCode int, msg string, data interface{}) {
 	g.C.JSON(httpCode, Response{
-		Code: errCode,
-		Msg:  constant.GetMsg(errCode),
+		Code: httpCode,
+		Msg:  msg,
 		Data: data,
 	})
 }

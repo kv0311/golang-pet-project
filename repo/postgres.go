@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"errors"
 	"golang-side-project/db"
 	"golang-side-project/model"
 	util "golang-side-project/utils"
@@ -15,21 +14,9 @@ import (
 func CreateAccount(user model.User) error {
 	user.CreatedOn = time.Now()
 	user.LastLogin = time.Now()
-	var response map[string]interface{}
-	// token, err := util.GenerateToken(user.UserID, user.Password)
-	// if err != nil {
-	// 	util.Error(map[string]interface{}{}, "fail to generate token")
-	// 	return err
-	// }
-	// user.Token = token
-	//Inser db
+
 	connection := db.GetConnection()
-	isExistUserID, _ := checkIsUserIDExists(user.UserID)
-	if isExistUserID == true {
-		util.Debug(response, "user id exists")
-		return errors.New("user id exists")
-	}
-	_, err := connection.Query("insert into user_management values($1,$2,$3,$4,$5,$6,$7)", user.UserID, user.UserName, user.Password, user.Email, user.CreatedOn, user.LastLogin, user.Token)
+	_, err := connection.Query("insert into user_management values($1,$2,$3,$4,$5,$6)", user.UserID, user.UserName, user.Password, user.Email, user.CreatedOn, user.LastLogin)
 	if err != nil {
 		return err
 	}
@@ -56,8 +43,8 @@ func LoginByUser(userLogin model.LoginModel) (string, error) {
 	// Inser db
 }
 
-//checkIsUserIDExists: check user id exist or not
-func checkIsUserIDExists(UserID string) (bool, error) {
+//CheckIsUserIDExists check user id exist or not
+func CheckIsUserIDExists(UserID string) (bool, error) {
 	var user model.User
 	connection := db.GetConnection()
 	rows, err := connection.Query("select * from user_management where user_id = $1", UserID)
